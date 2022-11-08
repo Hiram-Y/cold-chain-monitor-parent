@@ -1,0 +1,70 @@
+server:
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+  servlet:
+    context-path: /
+  use-forward-headers: true
+  port: 51000
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  application:
+    name: server-gateway
+  main:
+    banner-mode: 'off'
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # 开启从注册中心动态创建路由功能, 使用微服务名称进行路由
+          enabled: true
+          # 使用微服务名称为小写
+          lower-case-service-id: true
+      routes:
+        - id: eureka-client-user-router
+          uri: lb://service-user
+          predicates:
+            - Path=/gateway/cold/user/**
+          filters:
+            # 剔除前缀个数
+            - StripPrefix=3
+        - id: eureka-client-admin-router
+          uri: lb://service-admin
+          predicates:
+            - Path=/gateway/cold/admin/**
+          filters:
+            # 剔除前缀个数
+            - StripPrefix=3
+
+eureka:
+  instance:
+    # 偏向IP
+    prefer-ip-address: true
+    hostname: ${spring.cloud.client.ip-address}
+    # 实例ID, 最终呈现 127.0.0.1:8080
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    # 服务续约间隔, 默认时间30秒
+    lease-expiration-duration-in-seconds: 5
+    # 服务注册时间, 默认时间30秒
+    lease-renewal-interval-in-seconds: 5
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:51100/eureka
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always

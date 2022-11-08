@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>cold-chain-monitor-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <modules>
+        <module>cold-chain-commons</module>
+        <module>cold-chain-eureka</module>
+        <module>cold-chain-gateway</module>
+        <module>cold-chain-service</module>
+        <module>cold-chain-visual</module>
+        <module>cold-chain-api</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <spring.cloud.version>Greenwich.SR6</spring.cloud.version>
+        <spring-boot-starter-mybatis-plus.version>3.1.2</spring-boot-starter-mybatis-plus.version>
+        <spring-boot-starter-druid.version>1.1.22</spring-boot-starter-druid.version>
+
+        <java.jwt.version>4.2.1</java.jwt.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.13.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java.jwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${spring-boot-starter-mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${spring-boot-starter-druid.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

@@ -1,0 +1,55 @@
+server:
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+  servlet:
+    context-path: /
+  use-forward-headers: true
+  port: 51100
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  application:
+    name: server-eureka
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: 'off'
+
+eureka:
+  server:
+    # 服务剔除时间
+    expected-client-renewal-interval-seconds: 20
+  instance:
+    # 偏向IP
+    prefer-ip-address: true
+    hostname: ${spring.cloud.client.ip-address}
+    # 实例ID, 最终呈现 127.0.0.1:8080
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    # 服务续约间隔, 默认时间30秒
+    lease-expiration-duration-in-seconds: 5
+    # 服务注册时间, 默认时间30秒
+    lease-renewal-interval-in-seconds: 5
+  client:
+    # 是否将自己注册到注册服务中心
+    register-with-eureka: false
+    # 是否从eureka服务注册中心获取注册信息
+    fetch-registry: false
+    # 暴露给服务注册中心的地址
+    service-url:
+      defaultZone: http://${spring.cloud.client.ip-address}:${server.port}/eureka/
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
